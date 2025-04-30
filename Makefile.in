@@ -1476,14 +1476,14 @@ J := $(shell nproc)
 CCACHE_ENV := $(patsubst %,-e %,$(shell env|cut -d= -f1|grep '^CCACHE_'))
 ifeq ($(ENABLE_CCACHE),1)
 	export CCACHE_DIR := $(if $(CCACHE_DIR),$(CCACHE_DIR),$(HOME)/.ccache)
-	override DOCKER_OPTS := -v $(CCACHE_DIR):$(CCACHE_DIR)$(CONTAINER_MOUNT_OPTS) $(CCACHE_ENV) -e CCACHE_DIR=$(CCACHE_DIR) $(DOCKER_OPTS)
+	override DOCKER_OPTS := -v $(CCACHE_DIR):$(CCACHE_DIR)$(CONTAINER_MOUNT_OPTS):Z $(CCACHE_ENV) -e CCACHE_DIR=$(CCACHE_DIR) $(DOCKER_OPTS)
 else
 	export CCACHE_DISABLE := 1
 	override DOCKER_OPTS := $(CCACHE_ENV) -e CCACHE_DISABLE=1 $(DOCKER_OPTS)
 endif
 
 export CARGO_HOME := $(if $(CARGO_HOME),$(CARGO_HOME),$(HOME)/.cargo)
-override DOCKER_OPTS := -v $(CARGO_HOME):$(CARGO_HOME)$(CONTAINER_MOUNT_OPTS) -e CARGO_HOME=$(CARGO_HOME) $(DOCKER_OPTS)
+override DOCKER_OPTS := -v $(CARGO_HOME):$(CARGO_HOME)$(CONTAINER_MOUNT_OPTS):Z -e CARGO_HOME=$(CARGO_HOME) $(DOCKER_OPTS)
 
 ifneq ($(ROOTLESS_CONTAINER),1)
 	override DOCKER_OPTS := -e HOME -e USER -e USERID=$(shell id -u) -u $(shell id -u):$(shell id -g) $(DOCKER_OPTS)
@@ -1493,7 +1493,7 @@ ifeq ($(CONTAINER_ENGINE),)
 	CONTAINER_ENGINE := docker
 endif
 
-DOCKER_BASE = $(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC)$(CONTAINER_MOUNT_OPTS) -v $(OBJ):$(OBJ)$(CONTAINER_MOUNT_OPTS) \
+DOCKER_BASE = $(CONTAINER_ENGINE) run --rm -v $(SRC):$(SRC)$(CONTAINER_MOUNT_OPTS):Z -v $(OBJ):$(OBJ)$(CONTAINER_MOUNT_OPTS):Z \
                 -w $(OBJ) -e MAKEFLAGS \
                 $(DOCKER_OPTS) $(STEAMRT_IMAGE)
 

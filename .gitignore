@@ -2,6 +2,7 @@
 /dist-*
 /obj-*
 /syn-*
-
+/build/*
+/contrib/*
 /.vagrant/
 /vagrant_share/

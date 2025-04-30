@@ -29,7 +29,7 @@ jobs:
     - name: Upload ${{ github.ref_name }}.tar.gz to release
       uses: svenstaro/upload-release-action@2.5.0
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: ${{ secrets.GH_TOKEN }}
         tag: ${{ github.ref_name }}
         file: ${{ github.ref_name }}.tar.gz
         overwrite: false
@@ -37,7 +37,7 @@ jobs:
     - name: Upload ${{ github.ref_name }}.sha512sum to release
       uses: svenstaro/upload-release-action@2.5.0
       with:
-        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        repo_token: ${{ secrets.GH_TOKEN }}
         tag: ${{ github.ref_name }}
         file: ${{ github.ref_name }}.sha512sum
         overwrite: false

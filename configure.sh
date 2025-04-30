@@ -56,7 +56,7 @@ check_container_engine() {
     fi
 
     touch permission_check
-    local inner_uid="$($1 run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS" \
+    local inner_uid="$($1 run -v "$(pwd):/test$CONTAINER_MOUNT_OPTS:Z" \
                                             --rm $2 \
                                             stat --format "%u" /test/permission_check 2>&1)"
     rm permission_check
